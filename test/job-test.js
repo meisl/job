@@ -12,15 +12,18 @@ buster.testCase("job", {
             var thisArg = null; // well, dunno what else to pass as "this"
             assert.exception( function () { fnUnderTest.apply(thisArg, argsArray) }, this.typeErrorMatcher, msg);
         };
+        this.assertTypeErrorOnNonFunctionArg = function (fnUnderTest) {
+            this.assertTypeError(fnUnderTest, [], "no arg at all");
+            this.assertTypeError(fnUnderTest, [null], "null");
+            this.assertTypeError(fnUnderTest, [undefined], "undefined");
+            this.assertTypeError(fnUnderTest, [0], "0");
+            this.assertTypeError(fnUnderTest, [''], "empty string");
+            this.assertTypeError(fnUnderTest, [{}], "empty object");
+        }
     },
 
     ".create(..) throws TypeError when given a non-function arg": function() {
-        this.assertTypeError(job.create, [], "no arg at all");
-        this.assertTypeError(job.create, [null], "null");
-        this.assertTypeError(job.create, [undefined], "undefined");
-        this.assertTypeError(job.create, [0], "0");
-        this.assertTypeError(job.create, [''], "empty string");
-        this.assertTypeError(job.create, [{}], "empty object");
+        this.assertTypeErrorOnNonFunctionArg(job.create);
     },
 
     ".create(f)": {
@@ -53,12 +56,7 @@ buster.testCase("job", {
         ".then(..) throws TypeError when given a non-function arg": function() {
             var f = function () {};
             var j = job.create(f);
-            this.assertTypeError(j.then, [], "no arg at all");
-            this.assertTypeError(j.then, [null], "null");
-            this.assertTypeError(j.then, [undefined], "undefined");
-            this.assertTypeError(j.then, [0], "0");
-            this.assertTypeError(j.then, [''], "empty string");
-            this.assertTypeError(j.then, [{}], "empty object");
+            this.assertTypeErrorOnNonFunctionArg(j.then);
         },
 
         ".then(h) returns the job itself": function() {
