@@ -96,13 +96,6 @@ buster.testCase("job", {
             assert.exception(function () { j.then(''); }, "empty string");
             assert.exception(function () { j.then({}); }, "empty object");
         },
-
-        ".then() returns the job itself": function() {
-            var f = function () {};
-            var j = job.create(f);
-            var j2 = j.then(); // act
-            assert.same(j2, j);
-        },
         
         ".then(h) returns the job itself": function() {
             var f = function () {};
@@ -110,6 +103,14 @@ buster.testCase("job", {
             var h = function () {};
             var j2 = j.then(h); // act
             assert.same(j2, j);
+        },
+
+        "//.then(h)() calls h": function() {
+            var f = function () {};
+            var h = this.spy();
+            var j = job.create(f).then(h);
+            j(); // act
+            assert.calledOnce(h);
         },
 
     },
