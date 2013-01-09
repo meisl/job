@@ -32,9 +32,16 @@ buster.testCase("job", {
 
         ".then(h) returns the job itself": function() {
             var j = job.create();
-            var h = function () {}
+            var h = function () {};
             var j2 = j.then(h); // act
             assert.same(j2, j);
+        },
+
+        ".then(h)() calls h": function() {
+            var h = this.spy();
+            var j = job.create().then(h);
+            j(); // act
+            assert.calledOnce(h);
         },
         
     },
