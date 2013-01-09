@@ -10,20 +10,13 @@ buster.testCase("job", {
         this.typeErrorMatcher = { name: "TypeError", message: "Expected function" };
     },
 
-    ".create(..) throws TypeError when given": {
-
-        "no arg at all": function() {
-            assert.exception(function () { job.create(); }, this.typeErrorMatcher, "no arg");
-        },
-
-        "a non-function arg": function() {
-            assert.exception(function () { job.create(null); }, this.typeErrorMatcher, "null");
-            assert.exception(function () { job.create(undefined); }, this.typeErrorMatcher, "undefined");
-            assert.exception(function () { job.create(0); }, this.typeErrorMatcher, "0");
-            assert.exception(function () { job.create(''); }, this.typeErrorMatcher, "empty string");
-            assert.exception(function () { job.create({}); }, this.typeErrorMatcher, "empty object");
-        },
-        
+    ".create(..) throws TypeError when given a non-function arg": function() {
+        assert.exception(function () { job.create(); }, this.typeErrorMatcher, "no arg at all");
+        assert.exception(function () { job.create(null); }, this.typeErrorMatcher, "null");
+        assert.exception(function () { job.create(undefined); }, this.typeErrorMatcher, "undefined");
+        assert.exception(function () { job.create(0); }, this.typeErrorMatcher, "0");
+        assert.exception(function () { job.create(''); }, this.typeErrorMatcher, "empty string");
+        assert.exception(function () { job.create({}); }, this.typeErrorMatcher, "empty object");
     },
 
     ".create(f)": {
@@ -53,23 +46,15 @@ buster.testCase("job", {
 
         },
 
-        ".then(..) throws TypeError when given": {
-            "no arg at all": function() {
-                var f = function () {};
-                var j = job.create(f);
-                assert.exception(function () { j.then(); }, this.typeErrorMatcher, "no arg");
-            },
-
-            "a non-function arg": function() {
-                var f = function () {};
-                var j = job.create(f);
-                assert.exception(function () { j.then(null); }, this.typeErrorMatcher, "null");
-                assert.exception(function () { j.then(undefined); }, this.typeErrorMatcher, "undefined");
-                assert.exception(function () { j.then(0); }, this.typeErrorMatcher, "0");
-                assert.exception(function () { j.then(''); }, this.typeErrorMatcher, "empty string");
-                assert.exception(function () { j.then({}); }, this.typeErrorMatcher, "empty object");
-            },
-        
+        ".then(..) throws TypeError when given a non-function arg": function() {
+            var f = function () {};
+            var j = job.create(f);
+            assert.exception(function () { j.then(); }, this.typeErrorMatcher, "no arg at all");
+            assert.exception(function () { j.then(null); }, this.typeErrorMatcher, "null");
+            assert.exception(function () { j.then(undefined); }, this.typeErrorMatcher, "undefined");
+            assert.exception(function () { j.then(0); }, this.typeErrorMatcher, "0");
+            assert.exception(function () { j.then(''); }, this.typeErrorMatcher, "empty string");
+            assert.exception(function () { j.then({}); }, this.typeErrorMatcher, "empty object");
         },
 
         ".then(h) returns the job itself": function() {
