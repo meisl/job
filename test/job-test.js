@@ -6,18 +6,22 @@ var job = require("../lib/job.js");
 
 buster.testCase("job", {
 
-    ".create(..) throws when given": {
+    setUp: function () {
+        this.typeErrorMatcher = { name: "TypeError", message: "Expected function" };
+    },
+
+    ".create(..) throws TypeError when given": {
 
         "no arg at all": function() {
-            assert.exception(function () { job.create(); }, "no arg");
+            assert.exception(function () { job.create(); }, this.typeErrorMatcher, "no arg");
         },
 
         "a non-function arg": function() {
-            assert.exception(function () { job.create(null); }, "null");
-            assert.exception(function () { job.create(undefined); }, "undefined");
-            assert.exception(function () { job.create(0); }, "0");
-            assert.exception(function () { job.create(''); }, "empty string");
-            assert.exception(function () { job.create({}); }, "empty object");
+            assert.exception(function () { job.create(null); }, this.typeErrorMatcher, "null");
+            assert.exception(function () { job.create(undefined); }, this.typeErrorMatcher, "undefined");
+            assert.exception(function () { job.create(0); }, this.typeErrorMatcher, "0");
+            assert.exception(function () { job.create(''); }, this.typeErrorMatcher, "empty string");
+            assert.exception(function () { job.create({}); }, this.typeErrorMatcher, "empty object");
         },
         
     },
@@ -49,22 +53,25 @@ buster.testCase("job", {
 
         },
 
-        ".then(..) throws when not given any arg": function() {
-            var f = function () {};
-            var j = job.create(f);
-            assert.exception(function () { j.then(); }, "no arg");
+        ".then(..) throws TypeError when given": {
+            "no arg at all": function() {
+                var f = function () {};
+                var j = job.create(f);
+                assert.exception(function () { j.then(); }, this.typeErrorMatcher, "no arg");
+            },
+
+            "a non-function arg": function() {
+                var f = function () {};
+                var j = job.create(f);
+                assert.exception(function () { j.then(null); }, this.typeErrorMatcher, "null");
+                assert.exception(function () { j.then(undefined); }, this.typeErrorMatcher, "undefined");
+                assert.exception(function () { j.then(0); }, this.typeErrorMatcher, "0");
+                assert.exception(function () { j.then(''); }, this.typeErrorMatcher, "empty string");
+                assert.exception(function () { j.then({}); }, this.typeErrorMatcher, "empty object");
+            },
+        
         },
 
-        ".then(..) throws when given a non-function arg": function() {
-            var f = function () {};
-            var j = job.create(f);
-            assert.exception(function () { j.then(null); }, "null");
-            assert.exception(function () { j.then(undefined); }, "undefined");
-            assert.exception(function () { j.then(0); }, "0");
-            assert.exception(function () { j.then(''); }, "empty string");
-            assert.exception(function () { j.then({}); }, "empty object");
-        },
-        
         ".then(h) returns the job itself": function() {
             var f = function () {};
             var j = job.create(f);
