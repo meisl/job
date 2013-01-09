@@ -86,7 +86,7 @@ buster.testCase("job", {
             assert.calledOnce(f);
             assert.calledOnce(g);
             assert.calledOnce(h);
-            assert.callOrder(f, h, g);
+            assert.callOrder(f, g, h);
         },
 
     },
