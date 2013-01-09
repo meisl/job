@@ -14,8 +14,8 @@ buster.testCase("job", {
         },
 
         "that will call its argument": function() {
-            var j = job.create();
             var f = this.spy();
+            var j = job.create();
             j(f);
             assert.calledOnce(f);
         },
@@ -24,13 +24,12 @@ buster.testCase("job", {
 
     ".create(f) returns a function": {
 
-         "that will, when called with no arg, eventually call back f with a function arg": function(testDone) {
-            var f = function(done) {
-                assert.isFunction(done);
-                testDone();
-            };
+         "that will, when called with no arg, call f with a function arg": function() {
+            var f = this.spy();
             var j = job.create(f);
             j();
+            assert.calledOnce(f);
+            assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
     },
     
