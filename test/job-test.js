@@ -28,6 +28,13 @@ buster.testCase("job", {
             var j = job.create();
             assert.same(j.then(), j);
         },
+
+        ".then(h) returns the job itself": function() {
+            var j = job.create();
+            var h = function () {}
+            assert.same(j.then(h), j);
+        },
+        
     },
 
     ".create(f)": {
@@ -61,6 +68,13 @@ buster.testCase("job", {
             var f = function() {};
             var j = job.create(f);
             assert.same(j.then(), j);
+        },
+        
+        ".then(h) returns the job itself": function() {
+            var f = function() {};
+            var j = job.create(f);
+            var h = function () {}
+            assert.same(j.then(h), j);
         },
 
     },
