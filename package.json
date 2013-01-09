@@ -8,13 +8,13 @@
         "email": "meisl@sprax.eu"
     },
     "contributors": [],
-    //"main": "",
+    "main": "",
     "repository": {
         "type": "git",
         "url": "https://github.com/meisl/job.git"
     },
     "scripts": {
-        "test": "./run-tests"
+        "test": "node ./run-tests"
     },
     "dependencies": {
     },
