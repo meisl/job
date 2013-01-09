@@ -24,10 +24,18 @@ buster.testCase("job", {
 
         },
 
-        ".then() returns the job itself": function() {
+        ".then(..) throws when not given any arg": function() {
             var j = job.create();
-            var j2 = j.then(); // act
-            assert.same(j2, j);
+            assert.exception(function () { j.then(); }, "no arg");
+        },
+
+        ".then(..) throws when given a non-function arg": function() {
+            var j = job.create();
+            assert.exception(function () { j.then(null); }, "null");
+            assert.exception(function () { j.then(undefined); }, "undefined");
+            assert.exception(function () { j.then(0); }, "0");
+            assert.exception(function () { j.then(''); }, "empty string");
+            assert.exception(function () { j.then({}); }, "empty object");
         },
 
         ".then(h) returns the job itself": function() {
@@ -37,7 +45,7 @@ buster.testCase("job", {
             assert.same(j2, j);
         },
 
-        ".then(h)() calls h": function() {
+        "//.then(h)() calls h": function() {
             var h = this.spy();
             var j = job.create().then(h);
             j(); // act
@@ -72,18 +80,34 @@ buster.testCase("job", {
             },
 
         },
-        
+
+        ".then(..) throws when not given any arg": function() {
+            var f = function () {};
+            var j = job.create(f);
+            assert.exception(function () { j.then(); }, "no arg");
+        },
+
+        ".then(..) throws when given a non-function arg": function() {
+            var f = function () {};
+            var j = job.create(f);
+            assert.exception(function () { j.then(null); }, "null");
+            assert.exception(function () { j.then(undefined); }, "undefined");
+            assert.exception(function () { j.then(0); }, "0");
+            assert.exception(function () { j.then(''); }, "empty string");
+            assert.exception(function () { j.then({}); }, "empty object");
+        },
+
         ".then() returns the job itself": function() {
-            var f = function() {};
+            var f = function () {};
             var j = job.create(f);
             var j2 = j.then(); // act
             assert.same(j2, j);
         },
         
         ".then(h) returns the job itself": function() {
-            var f = function() {};
+            var f = function () {};
             var j = job.create(f);
-            var h = function () {}
+            var h = function () {};
             var j2 = j.then(h); // act
             assert.same(j2, j);
         },
