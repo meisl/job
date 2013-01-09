@@ -13,7 +13,7 @@ buster.testCase("job", {
             assert.isFunction(j);
         },
 
-        "that won't throw if given no argument": function(testDone) {
+        "that won't throw if given no argument": function() {
             var j = job.create();
             refute.exception(j, "should not have thrown");
         },
