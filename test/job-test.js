@@ -6,17 +6,21 @@ var job = require("../lib/job.js");
 
 buster.testCase("job", {
 
-    "create returns a function": function() {
-        var j = job.create();
-        assert.isFunction(j);
-    },
+    "create returns a function": {
+    
+        "!": function() {
+            var j = job.create();
+            assert.isFunction(j);
+        },
 
-    "create returns a function that will eventually call back its argument": function(testDone) {
-        var j = job.create();
-        j(function() {
-            assert(true);
-            testDone();
-        });
+        "that will eventually call back its argument": function(testDone) {
+            var j = job.create();
+            j(function() {
+                assert(true);
+                testDone();
+            });
+        },
+
     },
 
 });
