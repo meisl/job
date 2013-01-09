@@ -27,26 +27,22 @@ buster.testCase("job", {
     },
 
     ".create(f)": {
-
-         "returns a function that will, when called with": {
          
-            "no arg, call f with a function arg": function() {
-                var f = this.spy();
-                var j = job.create(f);
-                j();
-                assert.calledOnce(f);
-                assert.isFunction(f.args[0][0]); // first arg of first call to f
-            },
+        "() calls f with a function arg": function() {
+            var f = this.spy();
+            var j = job.create(f);
+            j();
+            assert.calledOnce(f);
+            assert.isFunction(f.args[0][0]); // first arg of first call to f
+        },
 
-             "a function arg, call f with that arg": function() {
-                var f = this.spy();
-                var j = job.create(f);
-                var g = function() {};
-                j(g);
-                assert.calledOnce(f);
-                assert.calledWithExactly(f, g);
-            },
-
+         "(g), g a function arg, calls f with g": function() {
+            var f = this.spy();
+            var j = job.create(f);
+            var g = function() {};
+            j(g);
+            assert.calledOnce(f);
+            assert.calledWithExactly(f, g);
         },
 
         ".then(..) throws TypeError when given a non-function arg": function() {
