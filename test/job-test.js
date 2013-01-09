@@ -48,13 +48,13 @@ buster.testCase("job", {
             this.assertTypeErrorOnNonFunctionArg(j);
         },
 
-         "(g), g a function, calls f with g": function() {
+         "(h), h a function, calls f with h": function() {
             var f = this.spy();
             var j = job.create(f);
-            var g = function() {};
-            j(g);
+            var h = function() {};
+            j(h);
             assert.calledOnce(f);
-            assert.calledWithExactly(f, g);
+            assert.calledWithExactly(f, h);
         },
 
         ".then() throws TypeError": function() {
@@ -69,23 +69,23 @@ buster.testCase("job", {
             this.assertTypeErrorOnNonFunctionArg(j.then);
         },
 
-        ".then(h), h a function, returns the job itself": function() {
+        ".then(g), g a function, returns the job itself": function() {
             var f = function () {};
             var j = job.create(f);
-            var h = function () {};
-            var j2 = j.then(h); // act
+            var g = function () {};
+            var j2 = j.then(g); // act
             assert.same(j2, j);
         },
 
-        ".then(h)(g), h & g functions, calls f, then h and finally g": function() {
+        ".then(g)(h), g & h functions, calls f, then g and finally h": function() {
             var f = this.spy();
-            var h = this.spy();
             var g = this.spy();
-            var j = job.create(f).then(h);
-            j(g); // act
+            var h = this.spy();
+            var j = job.create(f).then(g);
+            j(h); // act
             assert.calledOnce(f);
-            assert.calledOnce(h);
             assert.calledOnce(g);
+            assert.calledOnce(h);
             assert.callOrder(f, h, g);
         },
 
