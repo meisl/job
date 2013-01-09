@@ -77,13 +77,14 @@ buster.testCase("job", {
             assert.same(j2, j);
         },
 
-        ".then(h)(), h a function, calls f and h": function() {
+        ".then(h)(), h a function, calls f and (only) then h": function() {
             var f = this.spy();
             var h = this.spy();
             var j = job.create(f).then(h);
             j(); // act
             assert.calledOnce(f);
             assert.calledOnce(h);
+            assert.callOrder(f, h);
         },
 
     },
