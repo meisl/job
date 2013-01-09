@@ -78,7 +78,7 @@ buster.testCase("job", {
         },
 
         ".then(h)(), h a function, calls f and h": function() {
-            var f = function () {};
+            var f = this.spy();
             var h = this.spy();
             var j = job.create(f).then(h);
             j(); // act
