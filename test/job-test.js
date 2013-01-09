@@ -24,9 +24,9 @@ buster.testCase("job", {
 
         },
 
-        ".then is a function": function() {
+        ".then() returns the job itself": function() {
             var j = job.create();
-            assert.isFunction(j.then);
+            assert.same(j.then(), j);
         },
     },
 
@@ -57,10 +57,10 @@ buster.testCase("job", {
 
         },
         
-        ".then is a function": function() {
+        ".then() returns the job itself": function() {
             var f = function() {};
             var j = job.create(f);
-            assert.isFunction(j.then);
+            assert.same(j.then(), j);
         },
 
     },
