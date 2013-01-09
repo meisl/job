@@ -20,9 +20,9 @@ buster.testCase("job", {
             assert.calledOnce(f);
         },
 
-        "has a property 'then'": function() {
+        "has a property 'then' which is a function": function() {
             var j = job.create();
-            assert.defined(j.then);
+            assert.isFunction(j.then);
         },
 
     },
@@ -50,10 +50,10 @@ buster.testCase("job", {
 
         },
 
-        "has a property 'then'": function() {
+        "has a property 'then' which is a function": function() {
             var f = function() {};
             var j = job.create(f);
-            assert.defined(j.then);
+            assert.isFunction(j.then);
         },
 
     },
