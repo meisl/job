@@ -11,4 +11,12 @@ buster.testCase("job", {
         assert.isFunction(j);
     },
 
+    "create returns a function that will eventually call back its argument": function(testDone) {
+        var j = job.create();
+        j(function() {
+            assert(true);
+            testDone();
+        });
+    },
+
 });
