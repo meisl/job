@@ -22,5 +22,17 @@ buster.testCase("job", {
         },
 
     },
+
+    ".create(f) returns a function": {
+
+         "that will, when called with no arg, eventually call back f": function(testDone) {
+            var f = function() {
+                assert(true);
+                testDone();
+            };
+            var j = job.create(f);
+            j();
+        },
+    },
     
 });
