@@ -89,6 +89,20 @@ buster.testCase("job", {
             assert.callOrder(f, g, h);
         },
 
+        ".then(g).then(h)(i), g, h & i functions, calls f, then g then h and finally i": function() {
+            var f = this.spy( function (done) { done(); } );
+            var g = this.spy();
+            var h = this.spy();
+            var i = this.spy();
+            var j = job.create(f).then(g).then(h);
+            j(i); // act
+            assert.calledOnce(f);
+            assert.calledOnce(g);
+            assert.calledOnce(h);
+            assert.calledOnce(i);
+            assert.callOrder(f, g, h, i);
+        },
+
     },
     
 });
