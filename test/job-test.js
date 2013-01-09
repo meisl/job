@@ -31,6 +31,16 @@ buster.testCase("job", {
             assert.calledOnce(f);
             assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
+
+         "that will, when called with a function arg, call f with that arg": function() {
+            var f = this.spy();
+            var j = job.create(f);
+            var g = function() {};
+            j(g);
+            assert.calledOnce(f);
+            assert.calledWithExactly(f, g);
+        },
+
     },
     
 });
