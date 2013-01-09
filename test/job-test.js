@@ -6,12 +6,7 @@ var job = require("../lib/job.js");
 
 buster.testCase("job", {
 
-    "create returns a function": {
-    
-        "!": function() {
-            var j = job.create();
-            assert.isFunction(j);
-        },
+    ".create() returns a function": {
 
         "that won't throw if given no argument": function() {
             var j = job.create();
@@ -27,5 +22,5 @@ buster.testCase("job", {
         },
 
     },
-
+    
 });
