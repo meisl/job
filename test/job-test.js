@@ -35,6 +35,12 @@ buster.testCase("job", {
             assert.calledOnce(f);
             assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
+         
+        "(..) throws TypeError when given a non-function arg": function() {
+            var f = this.spy();
+            var j = job.create(f);
+            this.assertTypeErrorOnNonFunctionArg(j);
+        },
 
          "(g), g a function arg, calls f with g": function() {
             var f = this.spy();
