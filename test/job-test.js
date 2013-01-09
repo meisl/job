@@ -24,7 +24,7 @@ buster.testCase("job", {
 
     ".create(f) returns a function": {
 
-         "that will, when called with no arg, call f with a function arg": function() {
+         "//that will, when called with no arg, call f with a function arg": function() {
             var f = this.spy();
             var j = job.create(f);
             j();
