@@ -12,8 +12,10 @@ buster.testCase("job", {
             var thisArg = null; // well, dunno what else to pass as "this"
             assert.exception( function () { fnUnderTest.apply(thisArg, argsArray) }, this.typeErrorMatcher, msg);
         };
-        this.assertTypeErrorOnNonFunctionArg = function (fnUnderTest) {
+        this.assertTypeErrorOnNoArg = function (fnUnderTest) {
             this.assertTypeError(fnUnderTest, [], "no arg at all");
+        };
+        this.assertTypeErrorOnNonFunctionArg = function (fnUnderTest) {
             this.assertTypeError(fnUnderTest, [null], "null");
             this.assertTypeError(fnUnderTest, [undefined], "undefined");
             this.assertTypeError(fnUnderTest, [0], "0");
@@ -22,6 +24,10 @@ buster.testCase("job", {
         }
     },
 
+    ".create() throws TypeError": function() {
+        this.assertTypeErrorOnNoArg(job.create);
+    },
+    
     ".create(..) throws TypeError when given a non-function arg": function() {
         this.assertTypeErrorOnNonFunctionArg(job.create);
     },
@@ -42,7 +48,7 @@ buster.testCase("job", {
             this.assertTypeErrorOnNonFunctionArg(j);
         },
 
-         "(g), g a function arg, calls f with g": function() {
+         "(g), g a function, calls f with g": function() {
             var f = this.spy();
             var j = job.create(f);
             var g = function() {};
@@ -51,13 +57,19 @@ buster.testCase("job", {
             assert.calledWithExactly(f, g);
         },
 
+        ".then() throws TypeError": function() {
+            var f = function () {};
+            var j = job.create(f);
+            this.assertTypeErrorOnNoArg(j.then);
+        },
+
         ".then(..) throws TypeError when given a non-function arg": function() {
             var f = function () {};
             var j = job.create(f);
             this.assertTypeErrorOnNonFunctionArg(j.then);
         },
 
-        ".then(h) returns the job itself": function() {
+        ".then(h), h a function, returns the job itself": function() {
             var f = function () {};
             var j = job.create(f);
             var h = function () {};
@@ -65,7 +77,7 @@ buster.testCase("job", {
             assert.same(j2, j);
         },
 
-        "//.then(h)() calls h": function() {
+        "//.then(h)(), h a function, calls h": function() {
             var f = function () {};
             var h = this.spy();
             var j = job.create(f).then(h);
