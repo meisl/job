@@ -13,7 +13,7 @@ buster.testCase("job", {
             refute.exception(j, "should not have thrown");
         },
 
-        "that will eventually call back its argument": function(testDone) {
+        "//that will eventually call back its argument": function(testDone) {
             var j = job.create();
             j(function() {
                 assert(true);
