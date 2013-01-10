@@ -107,7 +107,7 @@ buster.testCase("job", {
             var b = function () {};
             
             var f = makeTestFn("f", 1, a);
-            var g = makeTestFn("g", 1, b);
+            var g = makeTestFn("g", 1, a);
             var h = makeTestFn("h", 1, b);
             var i = makeTestFn("i", 1, b);
             var j = makeTestFn("j", 1, job.create(f).then(g).then(h) );
