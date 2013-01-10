@@ -2,6 +2,8 @@ var buster = require("buster-node");
 var assert = buster.assert;
 var refute = buster.refute;
 
+var util = require("util");
+
 var job = require("../lib/job.js");
 
 buster.testCase("job", {
@@ -90,12 +92,32 @@ buster.testCase("job", {
         },
 
         ".then(g).then(h)(i), g, h & i functions, calls f, then g then h and finally i": function() {
-            var f = this.spy( function (done) { done(); } );
-            var g = this.spy();
-            var h = this.spy();
-            var i = this.spy();
-            var j = job.create(f).then(g).then(h);
-            j(i); // act
+            var callChain = "";
+            var self = this;
+            function makeTestFn(name, maxCallcount, f) {
+                var callCount = 0;
+                return self.spy( function () {
+                    callChain += "->" + name;
+                    if (++callCount > maxCallcount)
+                        throw new Error(name + " called " + callCount + " times! (" + callChain+ ")");
+                    return f.apply(this, arguments);
+                });
+            }
+            var a = function (done) { done(); }
+            var b = function () {};
+            
+            var f = makeTestFn("f", 1, a);
+            var g = makeTestFn("g", 1, b);
+            var h = makeTestFn("h", 1, b);
+            var i = makeTestFn("i", 1, b);
+            var j = makeTestFn("j", 1, job.create(f).then(g).then(h) );
+
+            try {
+                j(i);
+            } catch(e) {
+                throw new Error("callChain: " + callChain + "; " + util.inspect(e, true));
+            }
+
             assert.calledOnce(f);
             assert.calledOnce(g);
             assert.calledOnce(h);
