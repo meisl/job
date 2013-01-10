@@ -118,10 +118,10 @@ buster.testCase("job", {
                 throw new Error("callChain: " + callChain + "; " + util.inspect(e, true));
             }
 
-            assert.calledOnce(f);
-            assert.calledOnce(g);
-            assert.calledOnce(h);
-            assert.calledOnce(i);
+            assert.equals(f.callCount, 1, callChain + "; f.callCount");
+            assert.equals(g.callCount, 1, callChain + "; g.callCount");
+            assert.equals(h.callCount, 1, callChain + "; h.callCount");
+            assert.equals(i.callCount, 1, callChain + "; i.callCount");
             assert.callOrder(f, g, h, i);
         },
 
