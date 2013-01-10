@@ -82,38 +82,46 @@ buster.testCase("job", {
         },
          
         "() calls f with a function arg": function() {
-            var f = this.spy();
-            var j = job.create(f);
+            var f = this.spyX("f", 1, this.f_doesNothing );
+            var j = this.spyX("j", 1, job.create(f) );
+            
             j();
+            
             assert.calledOnce(f);
             assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
 
          "(h), h a function, calls f with h": function() {
-            var f = this.spy();
-            var j = job.create(f);
-            var h = function() {};
-            j(h);
+            var f = this.spyX("f", 1, this.f_doesNothing );
+            var g = this.spyX("f", 1, this.f_doesNothing );
+            var j = this.spyX("j", 1, job.create(f) );
+            
+            j(g);
+            
             assert.calledOnce(f);
-            assert.calledWithExactly(f, h);
+            assert.calledWithExactly(f, g);
         },
 
         ".then(g)": {
 
             ", g a function, returns the job itself": function() {
-                var f = function () {};
-                var g = function () {};
+                var f = this.spyX("f", 1, this.f_doesNothing );
+                var g = this.spyX("g", 1, this.f_doesNothing );
                 var j = job.create(f);
+                
                 var j2 = j.then(g); // act
+                
                 assert.same(j2, j);
             },
 
             "(h), g & h functions, calls f, then g and finally h": function() {
-                var f = this.spy( function (done) { done(); } );
-                var g = this.spy();
-                var h = this.spy();
-                var j = job.create(f).then(g);
-                j(h); // act
+                var f = this.spyX("f", 1, this.f_callsIts1stArg );
+                var g = this.spyX("g", 1, this.f_doesNothing );
+                var h = this.spyX("h", 1, this.f_doesNothing );
+                var j = this.spyX("j", 1, job.create(f).then(g) );
+                
+                j(h);
+                
                 assert.calledOnce(f);
                 assert.calledOnce(g);
                 assert.calledOnce(h);
@@ -127,13 +135,12 @@ buster.testCase("job", {
                 var i = this.spyX("i", 1, this.f_doesNothing);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
 
-                //j(i); // commented-out to illustrate .calledOnce that we've overwritten
+                j(i);
 
                 assert.calledOnce(f);
                 assert.calledOnce(g);
                 assert.calledOnce(h);
                 assert.calledOnce(i);
-
                 assert.callOrder(f, g, h, i);
             },
 
