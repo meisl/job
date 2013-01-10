@@ -46,7 +46,11 @@ buster.testCase("job", {
                     self.callChain += "->" + name;
                     if (++callCount > maxCallcount)
                         throw new Error(name + " called " + callCount + " times! (" + self.callChain+ ")");
-                    return f.apply(this, arguments);
+                    try {
+                        return f.apply(this, arguments);
+                    } catch(excFromF) {
+                        throw new Error("callChain: " + this.callChain + "; " + util.inspect(excFromF, true) + "\n" + excFromF.stack);
+                    }
                 });
                 spy.displayName = name; // to get a reasonable msg from .callOrder(...)
                 return spy;
@@ -119,18 +123,13 @@ buster.testCase("job", {
                 var i = this.spyX("i", 1, this.f_doesNothing);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
 
-                try {
-                    j(i);
-                } catch(e) {
-                    throw new Error("callChain: " + this.callChain + "; " + util.inspect(e, true) + "\n" + e.stack);
-                }
+                j(i);
 
                 assert.equals(f.callCount, 1, this.callChain + "; f.callCount");
                 assert.equals(g.callCount, 1, this.callChain + "; g.callCount");
                 assert.equals(h.callCount, 1, this.callChain + "; h.callCount");
                 assert.equals(i.callCount, 1, this.callChain + "; i.callCount");
-                //assert.callOrder(f, g, h, i);
-                assert.callOrder(i, g, h, f); // just to illustrate our spy.displayName
+                assert.callOrder(f, g, h, i);
             },
 
         },
