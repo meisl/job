@@ -53,10 +53,14 @@ buster.testCase("job", {
                     }
                 });
                 spy.displayName = name; // to get a reasonable msg from .callOrder(...)
+                var origCalledOnce = spy.calledOnce;
                 return spy;
             }
             this.f_callsIts1stArg = function (done) { done(); };
             this.f_doesNothing = function () {};
+            assert.calledOnce = function(spy) {
+                assert.equals(spy.callCount, 1, self.callChain + "; " + spy.displayName + ".callCount");
+            };
         },
          
         "(..) throws TypeError when given a non-function arg": function() {
@@ -123,12 +127,13 @@ buster.testCase("job", {
                 var i = this.spyX("i", 1, this.f_doesNothing);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
 
-                j(i);
+                //j(i); // commented-out to illustrate .calledOnce that we've overwritten
 
-                assert.equals(f.callCount, 1, this.callChain + "; f.callCount");
-                assert.equals(g.callCount, 1, this.callChain + "; g.callCount");
-                assert.equals(h.callCount, 1, this.callChain + "; h.callCount");
-                assert.equals(i.callCount, 1, this.callChain + "; i.callCount");
+                assert.calledOnce(f);
+                assert.calledOnce(g);
+                assert.calledOnce(h);
+                assert.calledOnce(i);
+
                 assert.callOrder(f, g, h, i);
             },
 
