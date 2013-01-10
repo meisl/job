@@ -38,15 +38,18 @@ buster.testCase("job", {
 
         setUp: function () {
             var self = this;
+            
             this.callChain = "";
             this.spyX = function (name, maxCallcount, f) {
                 var callCount = 0;
-                return self.spy( function () {
+                var spy = self.spy( function () {
                     self.callChain += "->" + name;
                     if (++callCount > maxCallcount)
                         throw new Error(name + " called " + callCount + " times! (" + self.callChain+ ")");
                     return f.apply(this, arguments);
                 });
+                spy.displayName = name; // to get a reasonable msg from .callOrder(...)
+                return spy;
             }
             this.f_callsIts1stArg = function (done) { done(); };
             this.f_doesNothing = function () {};
@@ -126,7 +129,8 @@ buster.testCase("job", {
                 assert.equals(g.callCount, 1, this.callChain + "; g.callCount");
                 assert.equals(h.callCount, 1, this.callChain + "; h.callCount");
                 assert.equals(i.callCount, 1, this.callChain + "; i.callCount");
-                assert.callOrder(f, g, h, i);
+                //assert.callOrder(f, g, h, i);
+                assert.callOrder(i, g, h, f); // just to illustrate our spy.displayName
             },
 
         },
