@@ -99,7 +99,7 @@ buster.testCase("job", {
             assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
 
-         "(h), h a function, calls f with h": function() {
+         "(g), g a function, calls f with g": function() {
             var f = this.spyX("f", 1, this.f_callsIts1stArg );
             var g = this.spyX("g", 1, this.f_callsIts1stArg );
             var j = this.spyX("j", 1, job.create(f) );
