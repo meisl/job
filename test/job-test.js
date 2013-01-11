@@ -90,7 +90,7 @@ buster.testCase("job", {
         },
          
         "() calls f with a function arg": function() {
-            var f = this.spyX("f", 1, this.f_doesNothing );
+            var f = this.spyX("f", 1, this.f_callsIts1stArg );
             var j = this.spyX("j", 1, job.create(f) );
             
             j();
@@ -100,8 +100,8 @@ buster.testCase("job", {
         },
 
          "(h), h a function, calls f with h": function() {
-            var f = this.spyX("f", 1, this.f_doesNothing );
-            var g = this.spyX("f", 1, this.f_doesNothing );
+            var f = this.spyX("f", 1, this.f_callsIts1stArg );
+            var g = this.spyX("f", 1, this.f_callsIts1stArg );
             var j = this.spyX("j", 1, job.create(f) );
             
             j(g);
@@ -113,8 +113,8 @@ buster.testCase("job", {
         ".then(g)": {
 
             ", g a function, returns the job itself": function() {
-                var f = this.spyX("f", 1, this.f_doesNothing );
-                var g = this.spyX("g", 1, this.f_doesNothing );
+                var f = this.spyX("f", 1, this.f_callsIts1stArg );
+                var g = this.spyX("g", 1, this.f_callsIts1stArg );
                 var j = job.create(f);
                 
                 var j2 = j.then(g); // act
@@ -124,8 +124,8 @@ buster.testCase("job", {
 
             "(h), g & h functions, calls f, then g and finally h": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg );
-                var g = this.spyX("g", 1, this.f_doesNothing );
-                var h = this.spyX("h", 1, this.f_doesNothing );
+                var g = this.spyX("g", 1, this.f_callsIts1stArg );
+                var h = this.spyX("h", 1, this.f_callsIts1stArg );
                 var j = this.spyX("j", 1, job.create(f).then(g) );
                 
                 j(h);
@@ -139,8 +139,8 @@ buster.testCase("job", {
             ".then(h)(i), g, h & i functions, calls f, then g then h and finally i": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                var h = this.spyX("h", 1, this.f_doesNothing);
-                var i = this.spyX("i", 1, this.f_doesNothing);
+                var h = this.spyX("h", 1, this.f_callsIts1stArg);
+                var i = this.spyX("i", 1, this.f_callsIts1stArg);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
 
                 j(i);
@@ -156,8 +156,8 @@ buster.testCase("job", {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                var i = this.spyX("i", 1, this.f_doesNothing);
-                var k = this.spyX("k", 1, this.f_doesNothing);
+                var i = this.spyX("i", 1, this.f_callsIts1stArg);
+                var k = this.spyX("k", 1, this.f_callsIts1stArg);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i) );
 
                 j(k);
@@ -175,8 +175,8 @@ buster.testCase("job", {
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
                 var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                var k = this.spyX("k", 1, this.f_doesNothing);
-                var l = this.spyX("l", 1, this.f_doesNothing);
+                var k = this.spyX("k", 1, this.f_callsIts1stArg);
+                var l = this.spyX("l", 1, this.f_callsIts1stArg);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i).then(k) );
 
                 j(l);
