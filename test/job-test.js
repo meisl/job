@@ -52,7 +52,10 @@ buster.testCase("job", {
                         if (excFromF.name == "RangeError") {
                             throw new Error("callChain: " + self.callChain + "; [" + excFromF + ", stack: " + excFromF.stack + "]");
                         } else {
-                            excFromF.message = "callChain: " + self.callChain + "; " + excFromF.message;
+                            if (!excFromF.callChain) {
+                                excFromF.callChain = true;
+                                excFromF.message = "callChain: " + self.callChain + "; " + excFromF.message;
+                            }
                             throw excFromF;
                         }
                     }
