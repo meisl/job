@@ -69,6 +69,16 @@ buster.testCase("job", {
             assert.calledOnce = function(spy) {
                 assert.equals(spy.callCount, 1, self.callChain + "; " + spy.displayName + ".callCount");
             };
+            
+            assert.eachCalledOnceInOrderWithFnArg = function () {
+                var i, f;
+                for (i = 0; i < arguments.length; i++) {
+                    f = arguments[i];
+                    assert.calledOnce(f);
+                    assert.isFunction(f.args[0][0]); // first arg of first call to f
+                }
+                assert.callOrder.apply(this, arguments);
+            };
         },
          
         "(..) throws TypeError when given a non-function arg": function() {
@@ -95,8 +105,7 @@ buster.testCase("job", {
             
             j();
             
-            assert.calledOnce(f);
-            assert.isFunction(f.args[0][0]); // first arg of first call to f
+            assert.eachCalledOnceInOrderWithFnArg(f);
         },
 
          "(g), g a function, calls f then g, all with a function arg": function() {
@@ -106,9 +115,7 @@ buster.testCase("job", {
             
             j(g);
             
-            assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
-            assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
-            assert.callOrder(f, g);
+            assert.eachCalledOnceInOrderWithFnArg(f, g);
         },
 
         ".then(g)": {
@@ -131,10 +138,7 @@ buster.testCase("job", {
                 
                 j(h);
                 
-                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
-                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
-                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
-                assert.callOrder(f, g, h);
+                assert.eachCalledOnceInOrderWithFnArg(f, g, h);
             },
             
             ".then(h)(i), g, h & i functions, calls f, then g then h then i, all with a function arg": function() {
@@ -146,11 +150,7 @@ buster.testCase("job", {
 
                 j(i);
 
-                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
-                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
-                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
-                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
-                assert.callOrder(f, g, h, i);
+                assert.eachCalledOnceInOrderWithFnArg(f, g, h, i);
             },
             
             ".then(h).then(i).(k), g, h, i, k functions, calls f, then g then h then i then k, all with a function arg": function() {
@@ -159,16 +159,12 @@ buster.testCase("job", {
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
                 var i = this.spyX("i", 1, this.f_callsIts1stArg);
                 var k = this.spyX("k", 1, this.f_callsIts1stArg);
+                var l = this.spyX("l", 1, this.f_callsIts1stArg);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i) );
 
                 j(k);
 
-                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
-                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
-                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
-                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
-                assert.calledOnce(k);   assert.isFunction(k.args[0][0]);
-                assert.callOrder(f, g, h, i, k);
+                assert.eachCalledOnceInOrderWithFnArg(f, g, h, i, k);
             },
             
             ".then(h).then(i).then(k)(l), g, h, i, k, l functions, calls f, then g then h then i then k then l, all with a function arg": function() {
@@ -182,13 +178,7 @@ buster.testCase("job", {
 
                 j(l);
 
-                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
-                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
-                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
-                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
-                assert.calledOnce(k);   assert.isFunction(k.args[0][0]);
-                assert.calledOnce(l);   assert.isFunction(l.args[0][0]);
-                assert.callOrder(f, g, h, i, k, l);
+                assert.eachCalledOnceInOrderWithFnArg(f, g, h, i, k, l);
             },
         },
     },
