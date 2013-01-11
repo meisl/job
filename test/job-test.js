@@ -49,7 +49,11 @@ buster.testCase("job", {
                     try {
                         return f.apply(this, arguments);
                     } catch(excFromF) {
-                        throw new Error("callChain: " + this.callChain + "; " + util.inspect(excFromF, true) + "\n" + excFromF.stack);
+                        if (excFromF.name == "RangeError") {
+                            throw new Error("callChain: " + self.callChain + "; [" + excFromF + ", stack: " + excFromF.stack + "]");
+                        } else {
+                            throw excFromF;
+                        }
                     }
                 });
                 spy.displayName = name; // to get a reasonable msg from .callOrder(...)
