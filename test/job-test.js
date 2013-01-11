@@ -101,7 +101,7 @@ buster.testCase("job", {
 
          "(h), h a function, calls f with h": function() {
             var f = this.spyX("f", 1, this.f_callsIts1stArg );
-            var g = this.spyX("f", 1, this.f_callsIts1stArg );
+            var g = this.spyX("g", 1, this.f_callsIts1stArg );
             var j = this.spyX("j", 1, job.create(f) );
             
             j(g);
