@@ -99,15 +99,15 @@ buster.testCase("job", {
             assert.isFunction(f.args[0][0]); // first arg of first call to f
         },
 
-         "(g), g a function, calls f then g": function() {
+         "(g), g a function, calls f then g, all with a function arg": function() {
             var f = this.spyX("f", 1, this.f_callsIts1stArg );
             var g = this.spyX("g", 1, this.f_callsIts1stArg );
             var j = this.spyX("j", 1, job.create(f) );
             
             j(g);
             
-            assert.calledOnce(f);
-            assert.calledOnce(g);
+            assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
+            assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
             assert.callOrder(f, g);
         },
 
@@ -123,7 +123,7 @@ buster.testCase("job", {
                 assert.same(j2, j);
             },
 
-            "(h), g & h functions, calls f, then g and finally h": function() {
+            "(h), g & h functions, calls f, then g then h, all with a function arg": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg );
                 var g = this.spyX("g", 1, this.f_callsIts1stArg );
                 var h = this.spyX("h", 1, this.f_callsIts1stArg );
@@ -131,13 +131,13 @@ buster.testCase("job", {
                 
                 j(h);
                 
-                assert.calledOnce(f);
-                assert.calledOnce(g);
-                assert.calledOnce(h);
+                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
+                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
+                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
                 assert.callOrder(f, g, h);
             },
             
-            ".then(h)(i), g, h & i functions, calls f, then g then h and finally i": function() {
+            ".then(h)(i), g, h & i functions, calls f, then g then h then i, all with a function arg": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
@@ -146,14 +146,14 @@ buster.testCase("job", {
 
                 j(i);
 
-                assert.calledOnce(f);
-                assert.calledOnce(g);
-                assert.calledOnce(h);
-                assert.calledOnce(i);
+                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
+                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
+                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
+                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
                 assert.callOrder(f, g, h, i);
             },
             
-            ".then(h).then(i).(k), g, h, i, k functions, calls f, then g then h then i and finally k": function() {
+            ".then(h).then(i).(k), g, h, i, k functions, calls f, then g then h then i then k, all with a function arg": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
@@ -163,15 +163,15 @@ buster.testCase("job", {
 
                 j(k);
 
-                assert.calledOnce(f);
-                assert.calledOnce(g);
-                assert.calledOnce(h);
-                assert.calledOnce(i);
-                assert.calledOnce(k);
+                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
+                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
+                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
+                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
+                assert.calledOnce(k);   assert.isFunction(k.args[0][0]);
                 assert.callOrder(f, g, h, i, k);
             },
             
-            ".then(h).then(i).then(k)(l), g, h, i, k, l functions, calls f, then g then h then i then k and finally l": function() {
+            ".then(h).then(i).then(k)(l), g, h, i, k, l functions, calls f, then g then h then i then k then l, all with a function arg": function() {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
@@ -182,12 +182,12 @@ buster.testCase("job", {
 
                 j(l);
 
-                assert.calledOnce(f);
-                assert.calledOnce(g);
-                assert.calledOnce(h);
-                assert.calledOnce(i);
-                assert.calledOnce(k);
-                assert.calledOnce(l);
+                assert.calledOnce(f);   assert.isFunction(f.args[0][0]);
+                assert.calledOnce(g);   assert.isFunction(g.args[0][0]);
+                assert.calledOnce(h);   assert.isFunction(h.args[0][0]);
+                assert.calledOnce(i);   assert.isFunction(i.args[0][0]);
+                assert.calledOnce(k);   assert.isFunction(k.args[0][0]);
+                assert.calledOnce(l);   assert.isFunction(l.args[0][0]);
                 assert.callOrder(f, g, h, i, k, l);
             },
         },
