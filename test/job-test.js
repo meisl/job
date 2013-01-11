@@ -79,159 +79,108 @@ buster.testCase("job", {
                 }
                 assert.callOrder.apply(this, arguments);
             };
+            
+            this.f = this.spyX("f", 1, this.f_callsIts1stArg );
+            this.g = this.spyX("g", 1, this.f_callsIts1stArg );
+            this.j = job.create(this.f);
         },
          
         "(..) throws TypeError when given a non-function arg": function() {
-            var f = this.spy();
-            var j = job.create(f);
-            this.assertTypeErrorOnNonFunctionArg(j);
+            this.assertTypeErrorOnNonFunctionArg(this.j);
         },
 
         ".then() throws TypeError": function() {
-            var f = function () {};
-            var j = job.create(f);
-            this.assertTypeErrorOnNoArg(j.then);
+            this.assertTypeErrorOnNoArg(this.j.then);
         },
 
         ".then(..) throws TypeError when given a non-function arg": function() {
-            var f = function () {};
-            var j = job.create(f);
-            this.assertTypeErrorOnNonFunctionArg(j.then);
+            this.assertTypeErrorOnNonFunctionArg(this.j.then);
         },
          
         "() calls f with a function arg": function() {
-            var f = this.spyX("f", 1, this.f_callsIts1stArg );
-            var j = this.spyX("j", 1, job.create(f) );
-            
-            j();
-            
-            assert.eachCalledOnceInOrderWithFnArg(f);
+            this.j(); // act
+            assert.eachCalledOnceInOrderWithFnArg(this.f);
         },
 
          "(g), g a function, calls f then g, all with a function arg": function() {
-            var f = this.spyX("f", 1, this.f_callsIts1stArg );
-            var g = this.spyX("g", 1, this.f_callsIts1stArg );
-            var j = this.spyX("j", 1, job.create(f) );
-            
-            j(g);
-            
-            assert.eachCalledOnceInOrderWithFnArg(f, g);
+            this.j(this.g); // act
+            assert.eachCalledOnceInOrderWithFnArg(this.f, this.g);
         },
 
         ".then(g)": {
+        
+            setUp: function () {
+                this.h = this.spyX("h", 1, this.f_callsIts1stArg );
+                this.j = this.j.then(this.g);
+            },
 
             ", g a function, returns the job itself": function() {
-                var f = this.spyX("f", 1, this.f_callsIts1stArg );
-                var g = this.spyX("g", 1, this.f_callsIts1stArg );
-                var j = job.create(f);
+                var j = job.create(this.f); // let's not use this.j as this already got .then(this.g) added
                 
-                var j2 = j.then(g); // act
+                var j2 = j.then(this.g); // act
                 
                 assert.same(j2, j);
             },
 
              "(), g a function, calls f then g, all with a function arg": function() {
-                var f = this.spyX("f", 1, this.f_callsIts1stArg );
-                var g = this.spyX("g", 1, this.f_callsIts1stArg );
-                var j = this.spyX("j", 1, job.create(f).then(g) );
-                
-                j();
-                
-                assert.eachCalledOnceInOrderWithFnArg(f, g);
+                this.j(); // act
+                assert.eachCalledOnceInOrderWithFnArg(this.f, this.g);
             },
 
             "(h), g & h functions, calls f, then g then h, all with a function arg": function() {
-                var f = this.spyX("f", 1, this.f_callsIts1stArg );
-                var g = this.spyX("g", 1, this.f_callsIts1stArg );
-                var h = this.spyX("h", 1, this.f_callsIts1stArg );
-                var j = this.spyX("j", 1, job.create(f).then(g) );
-                
-                j(h);
-                
-                assert.eachCalledOnceInOrderWithFnArg(f, g, h);
+                this.j(this.h); // act
+                assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h);
             },
             
             ".then(h)": {
+        
+                setUp: function () {
+                    this.i = this.spyX("i", 1, this.f_callsIts1stArg );
+                    this.j = this.j.then(this.h);
+                },
 
                 "(), g & h functions, calls f, then g then h, all with a function arg": function() {
-                    var f = this.spyX("f", 1, this.f_callsIts1stArg );
-                    var g = this.spyX("g", 1, this.f_callsIts1stArg );
-                    var h = this.spyX("h", 1, this.f_callsIts1stArg );
-                    var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
-                    
-                    j();
-                    
-                    assert.eachCalledOnceInOrderWithFnArg(f, g, h);
+                    this.j(); // act
+                    assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h);
                 },
             
                 "(i), g, h & i functions, calls f, then g then h then i, all with a function arg": function() {
-                    var f = this.spyX("f", 1, this.f_callsIts1stArg);
-                    var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                    var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                    var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                    var j = this.spyX("j", 1, job.create(f).then(g).then(h) );
-
-                    j(i);
-
-                    assert.eachCalledOnceInOrderWithFnArg(f, g, h, i);
+                    this.j(this.i); // act
+                    assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h, this.i);
                 },
                 
                 ".then(i)": {
+            
+                    setUp: function () {
+                        this.k = this.spyX("k", 1, this.f_callsIts1stArg );
+                        this.j = this.j.then(this.i);
+                    },
                 
                     "(), g, h & i functions, calls f, then g then h then i, all with a function arg": function() {
-                        var f = this.spyX("f", 1, this.f_callsIts1stArg);
-                        var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                        var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                        var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                        var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i) );
-
-                        j();
-
-                        assert.eachCalledOnceInOrderWithFnArg(f, g, h, i);
+                        this.j(); // act
+                        assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h, this.i);
                     },
                 
                     ".(k), g, h, i, k functions, calls f, then g then h then i then k, all with a function arg": function() {
-                        var f = this.spyX("f", 1, this.f_callsIts1stArg);
-                        var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                        var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                        var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                        var k = this.spyX("k", 1, this.f_callsIts1stArg);
-                        var l = this.spyX("l", 1, this.f_callsIts1stArg);
-                        var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i) );
-
-                        j(k);
-
-                        assert.eachCalledOnceInOrderWithFnArg(f, g, h, i, k);
+                        this.j(this.k); // act
+                        assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h, this.i, this.k);
                     },
                     
                     ".then(k)": {
+                
+                        setUp: function () {
+                            this.l = this.spyX("l", 1, this.f_callsIts1stArg );
+                            this.j = this.j.then(this.k);
+                        },
                     
                         ".(), g, h, i, k functions, calls f, then g then h then i then k, all with a function arg": function() {
-                            var f = this.spyX("f", 1, this.f_callsIts1stArg);
-                            var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                            var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                            var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                            var k = this.spyX("k", 1, this.f_callsIts1stArg);
-                            var l = this.spyX("l", 1, this.f_callsIts1stArg);
-                            var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i).then(k) );
-
-                            j();
-
-                            assert.eachCalledOnceInOrderWithFnArg(f, g, h, i, k);
+                            this.j(); // act
+                            assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h, this.i, this.k);
                         },
                     
                         "(l), g, h, i, k, l functions, calls f, then g then h then i then k then l, all with a function arg": function() {
-                            var f = this.spyX("f", 1, this.f_callsIts1stArg);
-                            var g = this.spyX("g", 1, this.f_callsIts1stArg);
-                            var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                            var i = this.spyX("i", 1, this.f_callsIts1stArg);
-                            var k = this.spyX("k", 1, this.f_callsIts1stArg);
-                            var l = this.spyX("l", 1, this.f_callsIts1stArg);
-                            var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i).then(k) );
-
-                            j(l);
-
-                            assert.eachCalledOnceInOrderWithFnArg(f, g, h, i, k, l);
+                            this.j(this.l); // act
+                            assert.eachCalledOnceInOrderWithFnArg(this.f, this.g, this.h, this.i, this.k, this.l);
                         },
                     },
                 },
