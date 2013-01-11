@@ -174,7 +174,7 @@ buster.testCase("job", {
                 var f = this.spyX("f", 1, this.f_callsIts1stArg);
                 var g = this.spyX("g", 1, this.f_callsIts1stArg);
                 var h = this.spyX("h", 1, this.f_callsIts1stArg);
-                var i = this.spyX("i", 1, this.f_doesNothing);
+                var i = this.spyX("i", 1, this.f_callsIts1stArg);
                 var k = this.spyX("k", 1, this.f_doesNothing);
                 var l = this.spyX("l", 1, this.f_doesNothing);
                 var j = this.spyX("j", 1, job.create(f).then(g).then(h).then(i).then(k) );
